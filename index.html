@@ -1,439 +1,2124 @@
 <!DOCTYPE html>
-<html lang="es-AR">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LabuRate | El benchmark de sueldos de Argentina</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LabuRate — El benchmark de sueldos de Argentina</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --naranja: #FF4D00;
+  --negro: #0A0A0A;
+  --blanco: #FFFFFF;
+  --crema: #F5F5F0;
+  --verde: #00C853;
+  --rojo: #FF1744;
+  --amarillo: #FFD600;
+  --gris: #888888;
+  --gris-claro: #E0E0E0;
+  --bebas: 'Bebas Neue', sans-serif;
+  --dm: 'DM Sans', sans-serif;
+}
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        /* ================= VARIABLES ================= */
-        :root {
-            --bg-main: #FFFFFF;
-            --bg-card: #F5F5F0;
-            --accent-primary: #FF4D00;
-            --accent-primary-hover: #E64500;
-            --accent-dark: #0A0A0A;
-            --success: #00C853;
-            --alert: #FF1744;
-            --warning: #FFD600;
-            --text-main: #0A0A0A;
-            --text-muted: #666666;
-            
-            --font-title: 'Bebas Neue', sans-serif;
-            --font-body: 'DM Sans', sans-serif;
-            
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+html { scroll-behavior: smooth; }
 
-        /* ================= RESET & BASICS ================= */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+body {
+  font-family: var(--dm);
+  background: var(--blanco);
+  color: var(--negro);
+  overflow-x: hidden;
+}
 
-        body {
-            font-family: var(--font-body);
-            color: var(--text-main);
-            background-color: var(--bg-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+/* ===== NAVBAR ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 5%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  transition: all 0.3s;
+}
 
-        h1, h2, h3, h4, .bebas {
-            font-family: var(--font-title);
-            text-transform: uppercase;
-            line-height: 1.1;
-            letter-spacing: 0.5px;
-        }
+.nav-logo {
+  font-family: var(--bebas);
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: var(--negro);
+  text-decoration: none;
+}
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+.nav-logo span { color: var(--naranja); }
 
-        button {
-            cursor: pointer;
-            font-family: var(--font-body);
-            border: none;
-            outline: none;
-            transition: var(--transition);
-        }
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  align-items: center;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+.nav-links a {
+  text-decoration: none;
+  color: var(--negro);
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
 
-        /* ================= NAVBAR ================= */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 100;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding: 16px 0;
-        }
+.nav-links a:hover { color: var(--naranja); }
 
-        .nav-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.nav-cta {
+  background: var(--naranja);
+  color: var(--blanco) !important;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 600 !important;
+  transition: transform 0.2s, background 0.2s !important;
+}
 
-        .logo {
-            display: flex;
-            flex-direction: column;
-        }
+.nav-cta:hover {
+  background: #e64400 !important;
+  transform: translateY(-1px);
+  color: var(--blanco) !important;
+}
 
-        .logo h1 {
-            font-size: 2rem;
-            color: var(--accent-primary);
-            margin: 0;
-        }
+/* ===== TICKER ===== */
+.ticker-wrap {
+  background: var(--negro);
+  color: var(--blanco);
+  padding: 10px 0;
+  overflow: hidden;
+  margin-top: 64px;
+}
 
-        .logo span {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+.ticker-track {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 40s linear infinite;
+}
 
-        .nav-links {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-        }
+.ticker-track:hover { animation-play-state: paused; }
 
-        .nav-links a {
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 40px;
+  font-size: 13px;
+  font-weight: 500;
+}
 
-        .nav-links a:hover {
-            color: var(--accent-primary);
-        }
+.ticker-item .role { color: var(--gris); }
+.ticker-item .val { color: var(--naranja); font-weight: 700; font-family: var(--bebas); font-size: 16px; letter-spacing: 0.5px; }
+.ticker-item .sep { color: var(--gris); }
 
-        .btn-login {
-            background: var(--bg-card);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 700;
-        }
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 
-        /* ================= HERO ================= */
-        #hero {
-            padding: 160px 0 80px;
-            background: linear-gradient(135deg, var(--bg-main) 60%, var(--bg-card) 100%);
-            position: relative;
-            overflow: hidden;
-        }
+/* ===== HERO ===== */
+.hero {
+  min-height: 88vh;
+  background: var(--blanco);
+  display: flex;
+  align-items: center;
+  padding: 60px 5% 80px;
+  position: relative;
+  overflow: hidden;
+}
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-        }
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,77,0,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
 
-        .hero-title {
-            font-size: clamp(4rem, 8vw, 6.5rem);
-            color: var(--accent-dark);
-            margin-bottom: 16px;
-        }
+.hero-content {
+  max-width: 700px;
+  position: relative;
+  z-index: 1;
+}
 
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            margin-bottom: 40px;
-            max-width: 600px;
-        }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,77,0,0.1);
+  color: var(--naranja);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255,77,0,0.2);
+}
 
-        .btn-primary {
-            background: var(--accent-primary);
-            color: white;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(255, 77, 0, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
+.hero-badge::before {
+  content: '';
+  width: 7px; height: 7px;
+  background: var(--naranja);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
 
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255,255,255,0.2);
-            transform: rotate(45deg) translateY(-100%);
-            transition: var(--transition);
-        }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
 
-        .btn-primary:hover {
-            background: var(--accent-primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 77, 0, 0.4);
-        }
+.hero h1 {
+  font-family: var(--bebas);
+  font-size: clamp(64px, 10vw, 120px);
+  line-height: 0.92;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+  color: var(--negro);
+}
 
-        .btn-primary:hover::after {
-            transform: rotate(45deg) translateY(100%);
-        }
+.hero h1 span { color: var(--naranja); }
 
-        .btn-secondary {
-            background: transparent;
-            color: var(--accent-dark);
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border: 2px solid var(--accent-dark);
-            border-radius: 8px;
-            margin-left: 16px;
-        }
+.hero p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #444;
+  max-width: 560px;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
 
-        .btn-secondary:hover {
-            background: var(--accent-dark);
-            color: white;
-        }
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
 
-        .hero-stats {
-            margin-top: 60px;
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
-        }
+.btn-primary {
+  background: var(--naranja);
+  color: var(--blanco);
+  border: none;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: var(--dm);
+  animation: btn-pulse 3s ease-in-out infinite;
+}
 
-        .stat-number {
-            font-size: 4rem;
-            color: var(--accent-primary);
-        }
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,0,0.3); }
+  50% { box-shadow: 0 0 0 12px rgba(255,77,0,0); }
+}
 
-        .stat-label {
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,77,0,0.35);
+  animation: none;
+}
 
-        /* TICKER */
-        .ticker-wrap {
-            width: 100%;
-            overflow: hidden;
-            background-color: var(--accent-dark);
-            color: white;
-            padding: 12px 0;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-        }
+.btn-secondary {
+  background: transparent;
+  color: var(--negro);
+  border: 2px solid var(--negro);
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--dm);
+}
 
-        .ticker {
-            display: flex;
-            white-space: nowrap;
-            animation: tickerAnim 40s linear infinite;
-        }
+.btn-secondary:hover {
+  background: var(--negro);
+  color: var(--blanco);
+  transform: translateY(-2px);
+}
 
-        .ticker:hover {
-            animation-play-state: paused;
-        }
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--gris-claro);
+  flex-wrap: wrap;
+}
 
-        .ticker-item {
-            padding: 0 2rem;
-            font-weight: 500;
-            font-size: 1rem;
-        }
+.hero-stat-num {
+  font-family: var(--bebas);
+  font-size: 42px;
+  color: var(--negro);
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
 
-        .ticker-item span.highlight {
-            color: var(--accent-primary);
-            font-weight: 700;
-        }
+.hero-stat-num span { color: var(--naranja); }
+.hero-stat-label { font-size: 13px; color: var(--gris); margin-top: 4px; font-weight: 500; }
 
-        @keyframes tickerAnim {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+/* ===== BENCHMARK ===== */
+.benchmark {
+  background: var(--negro);
+  padding: 100px 5%;
+  color: var(--blanco);
+}
 
-        /* ================= BENCHMARK PÚBLICO ================= */
-        #benchmark {
-            padding: 100px 0;
-            background: var(--accent-dark);
-            color: white;
-        }
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--naranja);
+  margin-bottom: 16px;
+}
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+.benchmark h2 {
+  font-family: var(--bebas);
+  font-size: clamp(48px, 7vw, 80px);
+  line-height: 1;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
 
-        .section-title {
-            font-size: 3.5rem;
-            margin-bottom: 16px;
-        }
+.benchmark .subtitle {
+  color: #aaa;
+  font-size: 17px;
+  margin-bottom: 48px;
+  max-width: 500px;
+}
 
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: #999;
-        }
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
 
-        .filters-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            background: rgba(255,255,255,0.05);
-            padding: 24px;
-            border-radius: 16px;
-            margin-bottom: 40px;
-        }
+.filter-select {
+  flex: 1;
+  min-width: 180px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--blanco);
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: var(--dm);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
+  padding-right: 44px;
+}
 
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+.filter-select option { background: #1a1a1a; color: var(--blanco); }
+.filter-select:focus { outline: none; border-color: var(--naranja); background-color: rgba(255,77,0,0.08); }
 
-        .filter-group label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #aaa;
-        }
+.benchmark-result {
+  transition: opacity 0.3s;
+}
 
-        select {
-            width: 100%;
-            padding: 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: #1A1A1A;
-            color: white;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            appearance: none;
-            cursor: pointer;
-            transition: var(--transition);
-        }
+.percentile-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 32px;
+}
 
-        select:focus {
-            border-color: var(--accent-primary);
-            outline: none;
-        }
+.p-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 28px 24px;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+  cursor: default;
+}
 
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-bottom: 40px;
-        }
+.p-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--naranja);
+  background: rgba(255,77,0,0.08);
+}
 
-        .card {
-            background: var(--bg-card);
-            color: var(--accent-dark);
-            padding: 32px;
-            border-radius: 16px;
-            text-align: center;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
+.p-card.p50 {
+  background: rgba(255,77,0,0.1);
+  border-color: rgba(255,77,0,0.4);
+}
 
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(255, 77, 0, 0.15);
-        }
+.p-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 12px;
+}
 
-        .card.main-card {
-            border: 2px solid var(--accent-primary);
-            transform: scale(1.05);
-        }
-        
-        .card.main-card:hover {
-            transform: scale(1.05) translateY(-8px);
-        }
+.p-card.p50 .p-label { color: var(--naranja); }
 
-        .card-label {
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
+.p-desc {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 16px;
+}
 
-        .card-value {
-            font-size: 3.5rem;
-            line-height: 1;
-            margin-bottom: 8px;
-            color: var(--accent-dark);
-        }
+.p-amount {
+  font-family: var(--bebas);
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1;
+  color: var(--blanco);
+  letter-spacing: 0.5px;
+}
 
-        .card.main-card .card-value {
-            color: var(--accent-primary);
-            font-size: 4.5rem;
-        }
+.p-card.p50 .p-amount { color: var(--naranja); }
 
-        .card-usd {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--success);
-            background: rgba(0, 200, 83, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
+.p-usd {
+  font-size: 13px;
+  color: #888;
+  margin-top: 8px;
+  font-weight: 500;
+}
 
-        .distribution-bar {
-            width: 100%;
-            height: 12px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 6px;
-            margin: 40px 0 20px;
-            position: relative;
-        }
+.p-card.p50 .p-usd { color: rgba(255,77,0,0.7); }
 
-        .dist-fill {
-            position: absolute;
-            height: 100%;
-            background: linear-gradient(90deg, #555, var(--accent-primary), #555);
-            border-radius: 6px;
-            left: 25%;
-            width: 50%;
-        }
+.bench-bar-wrap {
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
 
-        .dist-markers {
-            display: flex;
-            justify-content: space-between;
-            color: #999;
-            font-size: 0.85rem;
-            font-weight: 700;
-            padding: 0 5%;
-        }
+.bench-bar-label {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
 
-        .meta-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 24px;
-            margin-top: 24px;
-        }
+.bench-bar {
+  height: 12px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
 
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px
+.bench-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #444 0%, var(--naranja) 45%, #FFD600 100%);
+  border-radius: 100px;
+  width: 0%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bench-bar-markers {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #666;
+}
+
+.bench-meta {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.bench-freshness {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.freshness-green { background: rgba(0,200,83,0.15); color: var(--verde); border: 1px solid rgba(0,200,83,0.3); }
+.freshness-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+.bench-count { font-size: 13px; color: #888; }
+.bench-count span { color: var(--blanco); font-weight: 600; }
+
+.bench-cta {
+  margin-top: 40px;
+  padding: 28px;
+  background: rgba(255,77,0,0.1);
+  border: 1px solid rgba(255,77,0,0.25);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.bench-cta p {
+  font-size: 17px;
+  color: var(--blanco);
+  font-weight: 500;
+}
+
+.bench-cta p span { color: var(--naranja); font-weight: 700; }
+
+/* ===== COMO FUNCIONA ===== */
+.como {
+  background: var(--crema);
+  padding: 100px 5%;
+}
+
+.como h2 {
+  font-family: var(--bebas);
+  font-size: clamp(48px, 7vw, 72px);
+  margin-bottom: 60px;
+  letter-spacing: 0.5px;
+}
+
+.pasos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-bottom: 56px;
+}
+
+.paso {
+  background: var(--blanco);
+  border-radius: 16px;
+  padding: 40px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.paso:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+}
+
+.paso-num {
+  font-family: var(--bebas);
+  font-size: 100px;
+  color: rgba(0,0,0,0.04);
+  position: absolute;
+  top: -10px; right: 20px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.paso-icon {
+  width: 52px; height: 52px;
+  background: var(--naranja);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.paso h3 {
+  font-family: var(--bebas);
+  font-size: 28px;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.paso p { font-size: 15px; color: #666; line-height: 1.6; }
+
+.privacidad-nota {
+  background: var(--negro);
+  color: var(--blanco);
+  border-radius: 12px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.privacidad-nota .icon { font-size: 32px; }
+.privacidad-nota p { font-size: 15px; line-height: 1.6; color: #ccc; }
+.privacidad-nota strong { color: var(--blanco); }
+
+/* ===== SOCIAL PROOF ===== */
+.proof {
+  background: var(--blanco);
+  padding: 100px 5%;
+}
+
+.proof h2 {
+  font-family: var(--bebas);
+  font-size: clamp(48px, 7vw, 72px);
+  margin-bottom: 48px;
+  letter-spacing: 0.5px;
+}
+
+.testimonios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.testimonio {
+  background: var(--crema);
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid transparent;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.testimonio:hover {
+  border-color: var(--naranja);
+  transform: translateY(-4px);
+}
+
+.t-quote {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.t-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.t-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--bebas);
+  font-size: 18px;
+  color: var(--blanco);
+  flex-shrink: 0;
+}
+
+.t-name { font-weight: 700; font-size: 14px; }
+.t-role { font-size: 12px; color: var(--gris); margin-top: 2px; }
+
+.proof-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.proof-stat {
+  text-align: center;
+  padding: 32px 20px;
+  background: var(--negro);
+  border-radius: 16px;
+  color: var(--blanco);
+}
+
+.proof-stat-num {
+  font-family: var(--bebas);
+  font-size: 52px;
+  color: var(--naranja);
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+
+.proof-stat-label { font-size: 13px; color: #888; margin-top: 8px; font-weight: 500; }
+
+/* ===== PREMIUM ===== */
+.premium {
+  background: var(--negro);
+  padding: 100px 5%;
+  color: var(--blanco);
+}
+
+.premium h2 {
+  font-family: var(--bebas);
+  font-size: clamp(48px, 7vw, 80px);
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.premium .subtitle { color: #aaa; font-size: 17px; margin-bottom: 56px; max-width: 500px; }
+
+.premium-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 48px;
+}
+
+.premium-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 32px;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s;
+}
+
+.premium-card:hover {
+  border-color: var(--naranja);
+  background: rgba(255,77,0,0.08);
+  transform: translateY(-4px);
+}
+
+.pc-icon { font-size: 36px; margin-bottom: 16px; }
+.pc-title { font-family: var(--bebas); font-size: 24px; margin-bottom: 8px; letter-spacing: 0.5px; }
+.pc-desc { font-size: 14px; color: #888; line-height: 1.6; }
+
+.premium-cta-box {
+  background: var(--naranja);
+  border-radius: 20px;
+  padding: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.pct-left h3 {
+  font-family: var(--bebas);
+  font-size: 48px;
+  color: var(--blanco);
+  letter-spacing: 0.5px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.pct-left p { color: rgba(255,255,255,0.8); font-size: 16px; }
+
+.pct-price {
+  text-align: center;
+}
+
+.pct-price .price-num {
+  font-family: var(--bebas);
+  font-size: 72px;
+  color: var(--blanco);
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+
+.pct-price .price-per { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 16px; }
+
+.btn-white {
+  background: var(--blanco);
+  color: var(--naranja);
+  border: none;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: var(--dm);
+  white-space: nowrap;
+}
+
+.btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #050505;
+  color: #888;
+  padding: 56px 5% 32px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  font-family: var(--bebas);
+  font-size: 32px;
+  color: var(--blanco);
+  margin-bottom: 8px;
+}
+
+.footer-logo span { color: var(--naranja); }
+.footer-tagline { font-size: 14px; color: #666; }
+
+.footer-links {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.footer-col h4 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.footer-col a {
+  display: block;
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+}
+
+.footer-col a:hover { color: var(--naranja); }
+
+.footer-bottom {
+  border-top: 1px solid #1a1a1a;
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-bottom p { font-size: 13px; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--blanco);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.3s;
+}
+
+.modal-overlay.active .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  padding: 28px 32px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.modal-header h3 {
+  font-family: var(--bebas);
+  font-size: 32px;
+  letter-spacing: 0.5px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  line-height: 1;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.modal-close:hover { color: var(--negro); }
+
+.progress-bar {
+  height: 4px;
+  background: var(--gris-claro);
+  margin: 20px 32px 0;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--naranja);
+  border-radius: 100px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-text {
+  padding: 8px 32px 0;
+  font-size: 12px;
+  color: var(--gris);
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-body {
+  padding: 28px 32px 32px;
+}
+
+.form-step { display: none; }
+.form-step.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.step-title {
+  font-family: var(--bebas);
+  font-size: 24px;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+  color: var(--negro);
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="number"] {
+  width: 100%;
+  padding: 13px 16px;
+  border: 2px solid var(--gris-claro);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: var(--dm);
+  color: var(--negro);
+  background: var(--blanco);
+  transition: border-color 0.2s;
+  appearance: none;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  outline: none;
+  border-color: var(--naranja);
+}
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  flex: 1;
+  min-width: 120px;
+}
+
+.radio-option input { display: none; }
+
+.radio-option label {
+  display: block;
+  padding: 11px 16px;
+  border: 2px solid var(--gris-claro);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #555;
+}
+
+.radio-option input:checked + label {
+  border-color: var(--naranja);
+  background: rgba(255,77,0,0.06);
+  color: var(--naranja);
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--crema);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.toggle-row span { font-size: 14px; font-weight: 500; color: var(--negro); }
+
+.toggle {
+  width: 44px; height: 24px;
+  background: var(--gris-claro);
+  border-radius: 100px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle.on { background: var(--naranja); }
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: var(--blanco);
+  border-radius: 50%;
+  transition: left 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.toggle.on::after { left: 23px; }
+
+.usd-fields { display: none; }
+.usd-fields.show { display: block; }
+
+.usd-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.slider-wrap { padding: 8px 0; }
+
+.slider-wrap input[type="range"] {
+  width: 100%;
+  accent-color: var(--naranja);
+  height: 6px;
+  cursor: pointer;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--gris);
+  margin-top: 6px;
+}
+
+.slider-val {
+  text-align: center;
+  font-family: var(--bebas);
+  font-size: 28px;
+  color: var(--naranja);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.privacy-note {
+  background: rgba(0,0,0,0.04);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--verde);
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #444;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--naranja);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.modal-nav {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--gris-claro);
+}
+
+.btn-back {
+  background: none;
+  border: 2px solid var(--gris-claro);
+  color: #888;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--dm);
+  transition: all 0.2s;
+}
+
+.btn-back:hover { border-color: var(--negro); color: var(--negro); }
+
+.btn-next {
+  background: var(--naranja);
+  border: none;
+  color: var(--blanco);
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--dm);
+  transition: all 0.2s;
+  flex: 1;
+}
+
+.btn-next:hover { background: #e64400; transform: translateY(-1px); }
+
+/* ===== RESULTADO ===== */
+.resultado-screen { display: none; }
+.resultado-screen.show { display: block; }
+
+.velocimetro-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 24px;
+}
+
+.resultado-texto {
+  background: var(--crema);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  border-left: 4px solid var(--naranja);
+}
+
+.resultado-texto p { font-size: 15px; line-height: 1.7; color: #333; }
+.resultado-texto strong { color: var(--negro); }
+
+.resultado-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.r-card {
+  text-align: center;
+  padding: 16px;
+  background: var(--crema);
+  border-radius: 10px;
+}
+
+.r-card-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--gris); text-transform: uppercase; margin-bottom: 6px; }
+.r-card-num { font-family: var(--bebas); font-size: 24px; color: var(--negro); letter-spacing: 0.5px; }
+.r-card.highlight { background: var(--negro); }
+.r-card.highlight .r-card-label { color: rgba(255,77,0,0.7); }
+.r-card.highlight .r-card-num { color: var(--naranja); }
+
+.resultado-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-share {
+  flex: 1;
+  background: #25D366;
+  color: var(--blanco);
+  border: none;
+  padding: 13px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--dm);
+  transition: all 0.2s;
+}
+
+.btn-share:hover { background: #20b856; transform: translateY(-1px); }
+
+.btn-premium-cta {
+  flex: 1;
+  background: var(--naranja);
+  color: var(--blanco);
+  border: none;
+  padding: 13px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--dm);
+  transition: all 0.2s;
+}
+
+.btn-premium-cta:hover { background: #e64400; transform: translateY(-1px); }
+
+/* ===== GRAPH ===== */
+.mini-chart {
+  background: var(--crema);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.mini-chart-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-bottom: 12px;
+}
+
+/* ===== ANIMATIONS ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-up:nth-child(2) { transition-delay: 0.1s; }
+.fade-up:nth-child(3) { transition-delay: 0.2s; }
+.fade-up:nth-child(4) { transition-delay: 0.3s; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .percentile-cards { grid-template-columns: 1fr; }
+  .pasos { grid-template-columns: 1fr; }
+  .testimonios { grid-template-columns: 1fr; }
+  .proof-stats { grid-template-columns: repeat(2, 1fr); }
+  .premium-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 24px; }
+  .bench-cta { flex-direction: column; }
+  .premium-cta-box { flex-direction: column; text-align: center; }
+  .pct-price { width: 100%; }
+  .footer-links { gap: 32px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .resultado-cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">Labu<span>Rate</span></a>
+  <ul class="nav-links">
+    <li><a href="#benchmark">Benchmark</a></li>
+    <li><a href="#como">Cómo funciona</a></li>
+    <li><a href="#premium">Premium</a></li>
+    <li><a href="#" class="nav-cta" onclick="abrirModal()">Cargá tu sueldo</a></li>
+  </ul>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item"><span class="role">Dev Senior CABA</span> · <span class="val">$3.500.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Analista Financiero SR</span> · <span class="val">$2.400.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Gerente de Marketing</span> · <span class="val">$3.000.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Consultor Senior</span> · <span class="val">$2.800.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">People & Culture SR</span> · <span class="val">$1.900.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Dev Semi Senior CABA</span> · <span class="val">$2.300.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Gerente de Operaciones</span> · <span class="val">$3.200.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Dev Junior CABA</span> · <span class="val">$1.100.000</span> <span class="sep">·</span></span>
+    <!-- duplicado para loop infinito -->
+    <span class="ticker-item"><span class="role">Dev Senior CABA</span> · <span class="val">$3.500.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Analista Financiero SR</span> · <span class="val">$2.400.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Gerente de Marketing</span> · <span class="val">$3.000.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Consultor Senior</span> · <span class="val">$2.800.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">People & Culture SR</span> · <span class="val">$1.900.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Dev Semi Senior CABA</span> · <span class="val">$2.300.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Gerente de Operaciones</span> · <span class="val">$3.200.000</span> <span class="sep">·</span></span>
+    <span class="ticker-item"><span class="role">Dev Junior CABA</span> · <span class="val">$1.100.000</span> <span class="sep">·</span></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Actualizado en tiempo real</div>
+    <h1>¿SABÉS CUÁNTO<br>VALE TU <span>LABURO?</span></h1>
+    <p>El único benchmark de sueldos de Argentina que se actualiza todos los días. Público, gratuito y del lado del empleado.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="abrirModal()">Cargá tu sueldo →</button>
+      <button class="btn-secondary" onclick="document.getElementById('benchmark').scrollIntoView({behavior:'smooth'})">Ver el benchmark</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num"><span class="counter" data-target="3847">0</span></div>
+        <div class="hero-stat-label">sueldos en la base</div>
+      </div>
+      <div>
+        <div class="hero-stat-num"><span class="counter" data-target="15">0</span></div>
+        <div class="hero-stat-label">industrias cubiertas</div>
+      </div>
+      <div>
+        <div class="hero-stat-num"><span class="counter" data-target="24">0</span></div>
+        <div class="hero-stat-label">provincias</div>
+      </div>
+      <div>
+        <div class="hero-stat-num"><span class="counter" data-target="847">0</span></div>
+        <div class="hero-stat-label">cargas en las últimas 24h</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENCHMARK -->
+<section class="benchmark" id="benchmark">
+  <div class="section-label">📊 El mercado, en tiempo real</div>
+  <h2>BENCHMARK<br>PÚBLICO</h2>
+  <p class="subtitle">Filtrá por tu perfil y ve qué paga el mercado hoy. Sin login. Sin registro.</p>
+
+  <div class="filters">
+    <select class="filter-select" id="f-industria" onchange="actualizarFuncion(); calcularBenchmark()">
+      <option value="">Todas las industrias</option>
+      <option value="tech">Tecnología</option>
+      <option value="finanzas">Finanzas</option>
+      <option value="marketing">Marketing</option>
+      <option value="rrhh">RRHH</option>
+      <option value="consultoria">Consultoría</option>
+      <option value="operaciones">Operaciones</option>
+    </select>
+    <select class="filter-select" id="f-funcion" onchange="calcularBenchmark()">
+      <option value="">Todas las funciones</option>
+    </select>
+    <select class="filter-select" id="f-seniority" onchange="calcularBenchmark()">
+      <option value="">Todo seniority</option>
+      <option value="junior">Junior</option>
+      <option value="semisenior">Semi Senior</option>
+      <option value="senior">Senior</option>
+      <option value="lead">Lead / Gerente</option>
+    </select>
+  </div>
+
+  <div class="benchmark-result" id="bench-result">
+    <div class="percentile-cards">
+      <div class="p-card">
+        <div class="p-label">P25</div>
+        <div class="p-desc">25% del mercado gana menos</div>
+        <div class="p-amount" id="val-p25">$1.800.000</div>
+        <div class="p-usd" id="usd-p25"></div>
+      </div>
+      <div class="p-card p50">
+        <div class="p-label">P50 — MEDIANA</div>
+        <div class="p-desc">El sueldo del medio del mercado</div>
+        <div class="p-amount" id="val-p50">$2.600.000</div>
+        <div class="p-usd" id="usd-p50"></div>
+      </div>
+      <div class="p-card">
+        <div class="p-label">P75</div>
+        <div class="p-desc">Solo el 25% del mercado gana más</div>
+        <div class="p-amount" id="val-p75">$3.800.000</div>
+        <div class="p-usd" id="usd-p75"></div>
+      </div>
+    </div>
+
+    <div class="bench-bar-wrap">
+      <div class="bench-bar-label">Distribución del mercado</div>
+      <div class="bench-bar">
+        <div class="bench-bar-fill" id="bar-fill"></div>
+      </div>
+      <div class="bench-bar-markers">
+        <span id="bar-p25-label">P25</span>
+        <span id="bar-p50-label">P50 (mediana)</span>
+        <span id="bar-p75-label">P75</span>
+      </div>
+    </div>
+
+    <div class="bench-meta">
+      <div class="bench-freshness freshness-green">
+        <span class="freshness-dot"></span>
+        Datos frescos · Actualizado hace 4 min
+      </div>
+      <div class="bench-count">Basado en <span id="bench-count-num">847</span> respuestas en este segmento</div>
+    </div>
+
+    <div class="bench-cta">
+      <p>¿Dónde estás <span>vos</span> en este rango? Cargá tu sueldo y descubrí tu percentil exacto.</p>
+      <button class="btn-primary" onclick="abrirModal()" style="animation:none; white-space:nowrap;">Ver mi posición →</button>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="como" id="como">
+  <div class="section-label">⚡ Simple y transparente</div>
+  <h2>CÓMO<br>FUNCIONA</h2>
+  <div class="pasos">
+    <div class="paso fade-up">
+      <div class="paso-num">1</div>
+      <div class="paso-icon">📝</div>
+      <h3>Cargás tu sueldo</h3>
+      <p>Anónimo, tardás 90 segundos. Solo pedimos lo necesario para hacer el benchmark útil. Sin nombre, sin empresa, sin datos personales.</p>
+    </div>
+    <div class="paso fade-up">
+      <div class="paso-num">2</div>
+      <div class="paso-icon">📍</div>
+      <h3>Ves dónde estás</h3>
+      <p>Tu percentil exacto en el mercado. Si estás por debajo, arriba o en línea con lo que pagan para tu perfil. Con números concretos.</p>
+    </div>
+    <div class="paso fade-up">
+      <div class="paso-num">3</div>
+      <div class="paso-icon">🔄</div>
+      <h3>El mercado se actualiza</h3>
+      <p>Cada nuevo sueldo cargado mejora el benchmark para todos. Cuantos más seamos, más preciso es el dato para vos y para el resto.</p>
+    </div>
+  </div>
+  <div class="privacidad-nota">
+    <div class="icon">🔒</div>
+    <p><strong>Tu privacidad está garantizada.</strong> Tu sueldo nunca se muestra de forma individual. Solo aparece agregado con otros perfiles similares (mínimo 5 casos). Nunca compartimos tu email con nadie. Nunca.</p>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="proof" id="testimonios">
+  <div class="section-label">💬 Lo que dice la gente</div>
+  <h2>RESULTADOS<br>REALES</h2>
+  <div class="testimonios">
+    <div class="testimonio fade-up">
+      <p class="t-quote">"Fui al benchmark, vi que estaba en el percentil 31 para mi rol. Con ese dato fui a hablar con mi jefa y conseguí un aumento del 40%. LabuRate fue el argumento más fuerte que tuve."</p>
+      <div class="t-author">
+        <div class="t-avatar" style="background:#FF4D00;">MG</div>
+        <div>
+          <div class="t-name">Martina G.</div>
+          <div class="t-role">Desarrolladora Full Stack · Buenos Aires</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonio fade-up">
+      <p class="t-quote">"Estaba evaluando una oferta de trabajo y no sabía si era buena. Entré a LabuRate, vi que me estaban ofreciendo el P68 de mi segmento. Acepté con información, no con dudas."</p>
+      <div class="t-author">
+        <div class="t-avatar" style="background:#0A0A0A;">RL</div>
+        <div>
+          <div class="t-name">Rodrigo L.</div>
+          <div class="t-role">Analista de Finanzas · Córdoba</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonio fade-up">
+      <p class="t-quote">"Lo que más me gustó es que los datos son frescos. No es una encuesta de hace un año. En Argentina con esta inflación eso cambia todo."</p>
+      <div class="t-author">
+        <div class="t-avatar" style="background:#00C853;">VP</div>
+        <div>
+          <div class="t-name">Valeria P.</div>
+          <div class="t-role">People & Culture Manager · Rosario</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proof-stats">
+    <div class="proof-stat fade-up">
+      <div class="proof-stat-num counter" data-target="3847">0</div>
+      <div class="proof-stat-label">Sueldos en la base</div>
+    </div>
+    <div class="proof-stat fade-up">
+      <div class="proof-stat-num counter" data-target="15">0</div>
+      <div class="proof-stat-label">Industrias</div>
+    </div>
+    <div class="proof-stat fade-up">
+      <div class="proof-stat-num counter" data-target="24">0</div>
+      <div class="proof-stat-label">Provincias</div>
+    </div>
+    <div class="proof-stat fade-up">
+      <div class="proof-stat-num">97<span style="color:#aaa;font-size:32px;">%</span></div>
+      <div class="proof-stat-label">Actualizados en < 90 días</div>
+    </div>
+  </div>
+</section>
+
+<!-- PREMIUM -->
+<section class="premium" id="premium">
+  <div class="section-label">⭐ LabuRate Premium</div>
+  <h2>CONOCÉ TODO<br>SOBRE TU POSICIÓN</h2>
+  <p class="subtitle">El benchmark es gratis para siempre. Premium te da las herramientas para actuar con esa información.</p>
+
+  <div class="premium-grid">
+    <div class="premium-card fade-up">
+      <div class="pc-icon">🎯</div>
+      <div class="pc-title">Simulador de negociación</div>
+      <p class="pc-desc">Ingresá cuánto querés pedir y te decimos si es razonable, cuál es tu argumento más fuerte y cómo presentarlo en la reunión.</p>
+    </div>
+    <div class="premium-card fade-up">
+      <div class="pc-icon">📄</div>
+      <div class="pc-title">Informe PDF descargable</div>
+      <p class="pc-desc">Tu posición en el mercado en una página. Con números, percentil y contexto. Llevalo a tu próxima reunión con tu jefe.</p>
+    </div>
+    <div class="premium-card fade-up">
+      <div class="pc-icon">🔔</div>
+      <div class="pc-title">Alertas de mercado</div>
+      <p class="pc-desc">Te avisamos cuando haya una paritaria en tu industria o cuando el mercado de tu segmento se mueva significativamente.</p>
+    </div>
+    <div class="premium-card fade-up">
+      <div class="pc-icon">⚖️</div>
+      <div class="pc-title">Comparador de ofertas</div>
+      <p class="pc-desc">¿Te llegó una oferta? Ingresala y te decimos si es buena, regular o mala para tu perfil. Decidí con información.</p>
+    </div>
+  </div>
+
+  <div class="premium-cta-box">
+    <div class="pct-left">
+      <h3>30 DÍAS<br>GRATIS</h3>
+      <p>Sin tarjeta de crédito. Cancelás cuando querés.</p>
+    </div>
+    <div class="pct-price">
+      <div class="price-num">USD 8</div>
+      <div class="price-per">por mes después del período de prueba</div>
+      <button class="btn-white" onclick="abrirModal()">Empezar gratis →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">Labu<span>Rate</span></div>
+      <div class="footer-tagline">Del lado del empleado, siempre. 🇦🇷</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Producto</h4>
+        <a href="#benchmark">Benchmark público</a>
+        <a href="#como">Cómo funciona</a>
+        <a href="#premium">Premium</a>
+        <a href="#">Metodología</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacidad</a>
+        <a href="#">Términos de uso</a>
+        <a href="#">Política de datos</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="#">Para empresas</a>
+        <a href="#">API pública</a>
+        <a href="#">hola@laburate.ar</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 LabuRate · Hecho en Argentina 🇦🇷</p>
+    <p>Los datos son anónimos y agregados. Nunca mostramos sueldos individuales.</p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModalFuera(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modal-titulo">Cargá tu sueldo</h3>
+      <button class="modal-close" onclick="cerrarModal()">×</button>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:25%"></div>
+    </div>
+    <div class="progress-text">
+      <span id="step-label">Paso 1 de 4</span>
+      <span>⏱ ~90 segundos</span>
+    </div>
+    <div class="modal-body">
+
+      <!-- PASO 1 -->
+      <div class="form-step active" id="step-1">
+        <div class="step-title">Tu trabajo</div>
+        <div class="form-group">
+          <label>Industria</label>
+          <select id="s-industria" onchange="actualizarFuncionModal()">
+            <option value="">Seleccioná una industria</option>
+            <option value="tech">Tecnología</option>
+            <option value="finanzas">Finanzas</option>
+            <option value="marketing">Marketing</option>
+            <option value="rrhh">RRHH / People</option>
+            <option value="consultoria">Consultoría</option>
+            <option value="operaciones">Operaciones / Logística</option>
+            <option value="salud">Salud</option>
+            <option value="educacion">Educación</option>
+            <option value="retail">Retail / Comercio</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Función</label>
+          <select id="s-funcion">
+            <option value="">Primero seleccioná una industria</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Seniority</label>
+          <div class="radio-group">
+            <div class="radio-option"><input type="radio" name="seniority" id="s-jun" value="junior"><label for="s-jun">Junior<br><small style="font-weight:400;font-size:11px;color:#999">0-2 años</small></label></div>
+            <div class="radio-option"><input type="radio" name="seniority" id="s-ss" value="semisenior"><label for="s-ss">Semi Sr<br><small style="font-weight:400;font-size:11px;color:#999">2-5 años</small></label></div>
+            <div class="radio-option"><input type="radio" name="seniority" id="s-sr" value="senior"><label for="s-sr">Senior<br><small style="font-weight:400;font-size:11px;color:#999">5+ años</small></label></div>
+            <div class="radio-option"><input type="radio" name="seniority" id="s-ge" value="gerente"><label for="s-ge">Gerente+<br><small style="font-weight:400;font-size:11px;color:#999">Lider</small></label></div>
+          </div>
+        </div>
+        <div class="modal-nav">
+          <div></div>
+          <button class="btn-next" onclick="irPaso(2)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- PASO 2 -->
+      <div class="form-step" id="step-2">
+        <div class="step-title">Tu sueldo</div>
+        <div class="form-group">
+          <label>Salario bruto mensual en pesos</label>
+          <input type="text" id="s-sueldo" placeholder="Ej: 2.500.000" oninput="formatearSueldo(this)">
+        </div>
+        <div class="toggle-row" onclick="toggleUSD()">
+          <span>¿Parte de tu sueldo es en dólares?</span>
+          <div class="toggle" id="toggle-usd"></div>
+        </div>
+        <div class="usd-fields" id="usd-fields">
+          <div class="usd-row">
+            <div class="form-group">
+              <label>Monto en USD</label>
+              <input type="number" id="s-usd-monto" placeholder="Ej: 500">
+            </div>
+            <div class="form-group">
+              <label>Tipo de cambio</label>
+              <select id="s-usd-tipo">
+                <option value="oficial">Oficial</option>
+                <option value="mep">MEP / Bolsa</option>
+                <option value="blue" selected>Blue</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Modalidad</label>
+          <div class="radio-group">
+            <div class="radio-option"><input type="radio" name="modalidad" id="m-dep" value="dependencia" checked><label for="m-dep">Relación de dependencia</label></div>
+            <div class="radio-option"><input type="radio" name="modalidad" id="m-mono" value="monotributo"><label for="m-mono">Monotributo</label></div>
+            <div class="radio-option"><input type="radio" name="modalidad" id="m-mix" value="mixto"><label for="m-mix">Mixto</label></div>
+          </div>
+        </div>
+        <div class="modal-nav">
+          <button class="btn-back" onclick="irPaso(1)">← Atrás</button>
+          <button class="btn-next" onclick="irPaso(3)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- PASO 3 -->
+      <div class="form-step" id="step-3">
+        <div class="step-title">Tu contexto</div>
+        <div class="form-group">
+          <label>Provincia</label>
+          <select id="s-provincia">
+            <option value="">Seleccioná tu provincia</option>
+            <option value="caba">CABA</option>
+            <option value="bsas">Buenos Aires</option>
+            <option value="cordoba">Córdoba</option>
+            <option value="santa_fe">Santa Fe</option>
+            <option value="mendoza">Mendoza</option>
+            <option value="tucuman">Tucumán</option>
+            <option value="entre_rios">Entre Ríos</option>
+            <option value="salta">Salta</option>
+            <option value="misiones">Misiones</option>
+            <option value="chaco">Chaco</option>
+            <option value="corrientes">Corrientes</option>
+            <option value="santiago">Santiago del Estero</option>
+            <option value="san_juan">San Juan</option>
+            <option value="jujuy">Jujuy</option>
+            <option value="rio_negro">Río Negro</option>
+            <option value="neuquen">Neuquén</option>
+            <option value="formosa">Formosa</option>
+            <option value="chubut">Chubut</option>
+            <option value="san_luis">San Luis</option>
+            <option value="catamarca">Catamarca</option>
+            <option value="la_rioja">La Rioja</option>
+            <option value="la_pampa">La Pampa</option>
+            <option value="santa_cruz">Santa Cruz</option>
+            <option value="tierra_fuego">Tierra del Fuego</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tamaño de empresa</label>
+          <select id="s-empresa">
+            <option value="">Seleccioná el tamaño</option>
+            <option value="micro">Menos de 10 personas</option>
+            <option value="pequena">10 a 50 personas</option>
+            <option value="mediana">50 a 200 personas</option>
+            <option value="grande">200 a 1000 personas</option>
+            <option value="multi">Multinacional</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Años de experiencia total</label>
+          <div class="slider-wrap">
+            <div class="slider-val" id="slider-val">5 años</div>
+            <input type="range" min="0" max="30" value="5" id="s-experiencia" oninput="document.getElementById('slider-val').textContent = this.value == 30 ? '30+ años' : this.value + ' años'">
+            <div class="slider-labels"><span>0</span><span>10</span><span>20</span><span>30+</span></div>
+          </div>
+        </div>
+        <div class="modal-nav">
+          <button class="btn-back" onclick="irPaso(2)">← Atrás</button>
+          <button class="btn-next" onclick="irPaso(4)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- PASO 4 -->
+      <div class="form-step" id="step-4">
+        <div class="step-title">Casi listo</div>
+        <div class="privacy-note">
+          🔒 Solo usamos tu email para enviarte el resultado y avisarte cuando el mercado de tu perfil se mueva. <strong>Nunca lo compartimos con nadie. Nunca.</strong>
+        </div>
+        <div class="form-group">
+          <label>Tu email</label>
+          <input type="email" id="s-email" placeholder="nombre@email.com">
+        </div>
+        <div class="checkbox-group">
+          <label class="checkbox-item">
+            <input type="checkbox" id="cb-paritaria" checked>
+            Avisame cuando haya paritaria en mi industria
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="cb-recordatorio" checked>
+            Recordame actualizar mi sueldo cada 60 días por WhatsApp
+          </label>
+        </div>
+        <div class="modal-nav">
+          <button class="btn-back" onclick="irPaso(3)">← Atrás</button>
+          <button class="btn-next" onclick="mostrarResultado()">Ver dónde estoy en el mercado →</button>
+        </div>
+      </div>
+
+      <!-- RESULTADO -->
+      <div class="resultado-screen" id="resultado-screen">
+        <div style="text-align:center; margin-bottom:8px;">
+          <div style="font-family:var(--bebas); font-size:13px; letter-spacing:2px; color:var(--gris); text-transform:uppercase; margin-bottom:4px;">Tu posición en el mercado</div>
+        </div>
+        <div class="velocimetro-wrap">
+          <svg width="260" height="145" viewBox="0 0 260 145">
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#FF1744"/>
+                <stop offset="45%" style="stop-color:#FFD600"/>
+                <stop offset="100%" style="stop-color:#00C853"/>
+              </linearGradient>
+            </defs>
+            <!-- Track -->
+            <path d="M 20 130 A 110 110 0 0 1 240 130" fill="none" stroke="#eee" stroke-width="18" stroke-linecap="round"/>
+            <!-- Fill -->
+            <path d="M 20 130 A 110 110 0 0 1 240 130" fill="none" stroke="url(#gaugeGrad)" stroke-width="18" stroke-linecap="round" stroke-dasharray="345" stroke-dashoffset="345" id="gauge-fill" style="transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)"/>
+            <!-- Labels -->
+            <text x="14" y="148" fill="#FF1744" font-size="10" font-family="DM Sans" font-weight="700">Bajo</text>
+            <text x="107" y="30" fill="#FFD600" font-size="10" font-family="DM Sans" font-weight="700" text-anchor="middle">Mercado</text>
+            <text x="230" y="148" fill="#00C853" font-size="10" font-family="DM Sans" font-weight="700" text-anchor="end">Alto</text>
+            <!-- Needle -->
+            <g id="gauge-needle" style="transform-origin: 130px 130px; transform: rotate(-90deg); transition: transform 1.2s cubic-bezier(0.4,0,0.2,1)">
+              <line x1="130" y1="130" x2="130" y2="40" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="130" cy="130" r="8" fill="#0A0A0A"/>
+              <circle cx="130" cy="130" r="4" fill="white"/>
+            </g>
+            <!-- Percentil -->
+            <text x="130" y="118" fill="#0A0A0A" font-size="22" font-family="Bebas Neue" font-weight="400" text-anchor="middle" id="gauge-percentil">P54</text>
+          </svg>
+        </div>
+
+        <div class="resultado-texto" id="resultado-texto">
+          <p>Estás en el <strong>percentil 54</strong> del mercado para tu perfil. Tu sueldo es <strong>competitivo</strong>, pero el mercado subió 18% en los últimos 3 meses. ¿Tu empresa acompañó eso?</p>
+        </div>
+
+        <div class="resultado-cards">
+          <div class="r-card">
+            <div class="r-card-label">P25</div>
+            <div class="r-card-num" id="r-p25">$1.800.000</div>
+          </div>
+          <div class="r-card highlight">
+            <div class="r-card-label">P50 — TU ZONA</div>
+            <div class="r-card-num" id="r-p50">$2.600.000</div>
+          </div>
+          <div class="r-card">
+            <div class="r-card-label">P75</div>
+            <div class="r-card-num" id="r-p75">$3.800.000</div>
+          </div>
+        </div>
+
+        <!-- Mini gráfico SVG de evolución -->
+        <div class="mini-chart">
+          <div class="mini-chart-title">Evolución del mercado · últimos 12 meses</div>
+          <svg width="100%" height="80" viewBox="0 0 460 80" preserveAspectRatio="none">
+            <polyline points="0,70 40,65 80,62 120,55 160,50 200,45 240,42 280,35 320,30 360,25 400,18 460,10" fill="none" stroke="#FF4D00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="0,70 40,65 80,62 120,55 160,50 200,45 240,42 280,35 320,30 360,25 400,18 460,10" fill="rgba(255,77,0,0.08)"/>
+          </svg>
+          <div style="display:flex; justify-content:space-between; font-size:10px; color:#999; margin-top:4px;">
+            <span>Mar 24</span><span>Jun 24</span><span>Sep 24</span><span>Feb 25</span>
+          </div>
+        </div>
+
+        <div class="resultado-btns">
+          <button class="btn-share" onclick="compartirWA()">📱 Compartir por WhatsApp</button>
+          <button class="btn-premium-cta" onclick="cerrarModal()">Ver herramientas premium →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATOS BENCHMARK =====
+const benchmarkData = {
+  tech: {
+    funciones: ['Desarrollo de software', 'Data & Analytics', 'DevOps / Infraestructura', 'Product Management', 'UX / Diseño', 'QA / Testing'],
+    senior:     { p25: 2800000, p50: 3500000, p75: 4800000, usd: 800, count: 412 },
+    semisenior: { p25: 1800000, p50: 2300000, p75: 3000000, usd: null, count: 534 },
+    junior:     { p25: 800000,  p50: 1100000, p75: 1500000, usd: null, count: 389 },
+    gerente:    { p25: 4000000, p50: 5500000, p75: 7500000, usd: 1500, count: 98 },
+  },
+  finanzas: {
+    funciones: ['Análisis financiero', 'Contabilidad', 'Tesorería', 'Auditoría', 'Controlling', 'Inversiones'],
+    senior:     { p25: 1800000, p50: 2400000, p75: 3200000, usd: null, count: 267 },
+    semisenior: { p25: 1200000, p50: 1700000, p75: 2300000, usd: null, count: 312 },
+    junior:     { p25: 700000,  p50: 950000,  p75: 1300000, usd: null, count: 245 },
+    gerente:    { p25: 3000000, p50: 4200000, p75: 5800000, usd: null, count: 87 },
+  },
+  marketing: {
+    funciones: ['Marketing digital', 'Brand Management', 'Performance / Pauta', 'Contenido / RRSS', 'CRM', 'Producto'],
+    senior:     { p25: 1600000, p50: 2200000, p75: 3000000, usd: null, count: 198 },
+    semisenior: { p25: 1000000, p50: 1450000, p75: 2000000, usd: null, count: 234 },
+    junior:     { p25: 600000,  p50: 850000,  p75: 1200000, usd: null, count: 187 },
+    gerente:    { p25: 2500000, p50: 3500000, p75: 5000000, usd: null, count: 76 },
+  },
+  rrhh: {
+    funciones: ['People & Culture', 'Talent Acquisition', 'Compensaciones', 'Capacitación', 'HRBP', 'Bienestar'],
+    senior:     { p25: 1400000, p50: 1900000, p75: 2600000, usd: null, count: 156 },
+    semisenior: { p25: 900000,  p50: 1300000, p75: 1800000, usd: null, count: 189 },
+    junior:     { p25: 550000,  p50: 780000,  p75: 1100000, usd: null, count: 143 },
+    gerente:    { p25: 2200000, p50: 3100000, p75: 4400000, usd: null, count: 54 },
+  },
+  consultoria: {
+    funciones: ['Consultoría de gestión', 'Consultoría IT', 'Consultoría RRHH', 'Auditoría externa', 'Strategy', 'Operaciones'],
+    senior:     { p25: 2000000, p50: 2800000, p75: 3800000, usd: 500, count: 223 },
+    semisenior: { p25: 1300000, p50: 1800000, p75: 2500000, usd: null, count: 278 },
+    junior:     { p25: 750000,  p50: 1050000, p75: 1450000, usd: null, count: 198 },
+    gerente:    { p25: 3500000, p50: 4800000, p75: 6500000, usd: 800, count: 67 },
+  },
+  operaciones: {
+    funciones: ['Logística', 'Supply Chain', 'Producción', 'Calidad', 'Compras', 'Proyectos'],
+    senior:     { p25: 1700000, p50: 2300000, p75: 3100000, usd: null, count: 178 },
+    semisenior: { p25: 1100000, p50: 1550000, p75: 2100000, usd: null, count: 212 },
+    junior:     { p25: 650000,  p50: 900000,  p75: 1250000, usd: null, count: 167 },
+    gerente:    { p25: 2500000, p50: 3200000, p75: 4500000, usd: null, count: 89 },
+  }
+};
+
+const funcionesDefault = ['Seleccioná primero una industria'];
+
+function formatNum(n) {
+  return '$' + n.toLocaleString('es-AR');
+}
+
+function actualizarFuncion() {
+  const ind = document.getElementById('f-industria').value;
+  const sel = document.getElementById('f-funcion');
+  sel.innerHTML = '<option value="">Todas las funciones</option>';
+  if (ind && benchmarkData[ind]) {
+    benchmarkData[ind].funciones.forEach(f => {
+      sel.innerHTML += `<option value="${f}">${f}</option>`;
+    });
+  }
+}
+
+function actualizarFuncionModal() {
+  const ind = document.getElementById('s-industria').value;
+  const sel = document.getElementById('s-funcion');
+  sel.innerHTML = '';
+  if (ind && benchmarkData[ind]) {
+    sel.innerHTML = '<option value="">Seleccioná tu función</option>';
+    benchmarkData[ind].funciones.forEach(f => {
+      sel.innerHTML += `<option value="${f}">${f}</option>`;
+    });
+  } else {
+    sel.innerHTML = '<option value="">Primero seleccioná una industria</option>';
+  }
+}
+
+function calcularBenchmark() {
+  const ind = document.getElementById('f-industria').value;
+  const sen = document.getElementById('f-seniority').value;
+
+  let data = null;
+  if (ind && benchmarkData[ind]) {
+    if (sen && benchmarkData[ind][sen]) {
+      data = benchmarkData[ind][sen];
+    } else {
+      // promedio de todos los seniority de esa industria
+      const snrs = ['junior','semisenior','senior','gerente'];
+      const avg = { p25:0, p50:0, p75:0, usd:null, count:0 };
+      snrs.forEach(s => {
+        avg.p25 += benchmarkData[ind][s].p25;
+        avg.p50 += benchmarkData[ind][s].p50;
+        avg.p75 += benchmarkData[ind][s].p75;
+        avg.count += benchmarkData[ind][s].count;
+      });
+      avg.p25 = Math.round(avg.p25/4);
+      avg.p50 = Math.round(avg.p50/4);
+      avg.p75 = Math.round(avg.p75/4);
+      data = avg;
+    }
+  } else {
+    // promedio general
+    data = { p25: 1200000, p50: 2100000, p75: 3200000, usd: null, count: 3847 };
+  }
+
+  // Animación de los números
+  animateValue('val-p25', data.p25);
+  animateValue('val-p50', data.p50);
+  animateValue('val-p75', data.p75);
+
+  document.getElementById('r-p25').textContent = formatNum(data.p25);
+  document.getElementById('r-p50').textContent = formatNum(data.p50);
+  document.getElementById('r-p75').textContent = formatNum(data.p75);
+
+  if (data.usd) {
+    document.getElementById('usd-p50').textContent = `+ USD ${data.usd} (blue)`;
+    document.getElementById('usd-p25').textContent = '';
+    document.getElementById('usd-p75').textContent = `+ USD ${data.usd + 200} (blue)`;
+  } else {
+    document.getElementById('usd-p25').textContent = '';
+    document.getElementById('usd-p50').textContent = '';
+    document.getElementById('usd-p75').textContent = '';
+  }
+
+  document.getElementById('bench-count-num').textContent = data.count.toLocaleString('es-AR');
+
+  // Animar barra
+  setTimeout(() => {
+    document.getElementById('bar-fill').style.width = '65%';
+  }, 100);
+}
+
+function animateValue(id, target) {
+  const el = document.getElementById(id);
+  const start = 0;
+  const duration = 600;
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(start + (target - start) * ease);
+    el.textContent = formatNum(current);
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// ===== MODAL =====
+let currentStep = 1;
+
+function abrirModal() {
+  document.getElementById('modal-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  irPaso(1);
+  document.getElementById('resultado-screen').classList.remove('show');
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-1').classList.add('active');
+}
+
+function cerrarModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function cerrarModalFuera(e) {
+  if (e.target === document.getElementById('modal-overlay')) cerrarModal();
+}
+
+function irPaso(n) {
+  currentStep = n;
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById(`step-${n}`)?.classList.add('active');
+  document.getElementById('progress-fill').style.width = (n * 25) + '%';
+  document.getElementById('step-label').textContent = `Paso ${n} de 4`;
+  document.getElementById('modal-titulo').textContent = ['', 'Cargá tu sueldo', 'Tu sueldo', 'Tu contexto', 'Casi listo'][n];
+}
+
+function mostrarResultado() {
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('resultado-screen').classList.add('show');
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('step-label').textContent = '¡Listo!';
+  document.getElementById('modal-titulo').textContent = 'Tu posición en el mercado';
+
+  // Determinar datos del segmento
+  const ind = document.getElementById('s-industria').value || 'tech';
+  const sen = document.querySelector('input[name="seniority"]:checked')?.value || 'senior';
+  const data = (benchmarkData[ind] && benchmarkData[ind][sen]) ? benchmarkData[ind][sen] : { p25:1800000, p50:2600000, p75:3800000 };
+
+  document.getElementById('r-p25').textContent = formatNum(data.p25);
+  document.getElementById('r-p50').textContent = formatNum(data.p50);
+  document.getElementById('r-p75').textContent = formatNum(data.p75);
+
+  // Calcular percentil simulado
+  const sueldoStr = document.getElementById('s-sueldo').value.replace(/\./g,'').replace(',','.');
+  const sueldo = parseFloat(sueldoStr) || data.p50;
+  let percentil;
+  if (sueldo <= data.p25) percentil = Math.round(10 + (sueldo / data.p25) * 15);
+  else if (sueldo <= data.p50) percentil = Math.round(25 + ((sueldo - data.p25) / (data.p50 - data.p25)) * 25);
+  else if (sueldo <= data.p75) percentil = Math.round(50 + ((sueldo - data.p50) / (data.p75 - data.p50)) * 25);
+  else percentil = Math.min(98, Math.round(75 + ((sueldo - data.p75) / data.p75) * 20));
+
+  // Animar velocímetro
+  const angle = -90 + (percentil / 100) * 180;
+  document.getElementById('gauge-percentil').textContent = 'P' + percentil;
+  setTimeout(() => {
+    document.getElementById('gauge-needle').style.transform = `rotate(${angle}deg)`;
+    const offset = 345 - (percentil / 100) * 345;
+    document.getElementById('gauge-fill').style.strokeDashoffset = offset;
+  }, 200);
+
+  // Texto personalizado
+  let texto;
+  if (percentil < 30) {
+    texto = `Tu sueldo está en el <strong>percentil ${percentil}</strong>. El <strong>${100-percentil}% de personas</strong> con tu perfil gana más que vos. Tenés argumentos sólidos para pedir un aumento.`;
+  } else if (percentil < 65) {
+    texto = `Estás en el <strong>percentil ${percentil}</strong>. Tu sueldo es competitivo. Sin embargo, el mercado para tu perfil subió <strong>18% en los últimos 3 meses</strong>. ¿Tu empresa acompañó ese ritmo?`;
+  } else {
+    texto = `Estás en el <strong>percentil ${percentil}</strong>. Sos de los <strong>mejor pagados</strong> de tu segmento. Compartí LabuRate con tus colegas para que ellos también sepan cuánto vale su laburo.`;
+  }
+  document.getElementById('resultado-texto').innerHTML = `<p>${texto}</p>`;
+}
+
+function toggleUSD() {
+  const toggle = document.getElementById('toggle-usd');
+  const fields = document.getElementById('usd-fields');
+  toggle.classList.toggle('on');
+  fields.classList.toggle('show');
+}
+
+function formatearSueldo(input) {
+  let val = input.value.replace(/\D/g, '');
+  if (val) {
+    input.value = parseInt(val).toLocaleString('es-AR');
+  }
+}
+
+function compartirWA() {
+  const text = encodeURIComponent('Usé LabuRate y descubrí dónde estoy parado en el mercado laboral. ¿Vos sabés cuánto vale tu laburo? Chequealo en laburate.vercel.app');
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+// ===== CONTADORES ANIMADOS =====
+function animarContadores() {
+  document.querySelectorAll('.counter').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const duration = 1800;
+    const start = performance.now();
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 4);
+      el.textContent = Math.round(target * ease).toLocaleString('es-AR');
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+// ===== INTERSECTION OBSERVER =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      if (entry.target.querySelector('.counter')) animarContadores();
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+document.querySelectorAll('.proof-stat, .hero-stats').forEach(el => observer.observe(el));
+
+// Activar contadores del hero al cargar
+window.addEventListener('load', () => {
+  setTimeout(animarContadores, 400);
+  // Inicializar barra del benchmark
+  setTimeout(() => {
+    document.getElementById('bar-fill').style.width = '65%';
+  }, 600);
+});
+
+// Keyboard close modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') cerrarModal();
+});
+
+// Inicializar benchmark
+calcularBenchmark();
+</script>
+</body>
+</html>
